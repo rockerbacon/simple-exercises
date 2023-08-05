@@ -1,12 +1,15 @@
 ## Introduction
 This repository explores 8 extremely simple and well-defined coding exercises.
-Each exercise is completed twice: first a minimalist approach is taken, followed by a more elaborate one.
+
+Each exercise is completed twice: first a minimalistic approach is taken, followed by a more elaborate one.
 Details on the exercises and approaches are documented below.
 
 ## Minimalistic Approach
 First, a minimal, naive approach is taken.
 The goal is to minimize the time to complete the exercises, while also writing the (arguably) most intuitive and simple solution to the proposed problems.
+
 All solutions developed under this approach are available in the `minimalistic` directory.
+
 The code is written in Python (version 3.11.4). There is no specific reason for using Python, most general-purpose programming languages are well-suited for solving the exercises with this approach.
 
 ## Elaborate Approach
