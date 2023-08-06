@@ -34,27 +34,27 @@ void biguint_set(biguint_t* biguint, uint64_t value) {
 }
 
 void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2) {
-	biguint_t* greater_addend;
-	biguint_t* smaller_addend;
+	biguint_t* longer_addend;
+	biguint_t* shorter_addend;
 
 	if (addend1->len < addend2->len) {
-		greater_addend = addend2;
-		smaller_addend = addend1;
+		longer_addend = addend2;
+		shorter_addend = addend1;
 	} else {
-		greater_addend = addend1;
-		smaller_addend = addend2;
+		longer_addend = addend1;
+		shorter_addend = addend2;
 	}
 
-	if (total_buffer->len < greater_addend->len) {
-		biguint_increase_len(total_buffer, greater_addend->len + 1);
+	if (total_buffer->len < longer_addend->len) {
+		biguint_increase_len(total_buffer, longer_addend->len + 1);
 	}
 
 	size_t i = 0;
 	uint32_t carry = 0;
-	while (i < smaller_addend->len) {
+	while (i < shorter_addend->len) {
 		uint64_t sum =
-			(uint64_t)smaller_addend->value[i] +
-			(uint64_t)greater_addend->value[i] +
+			(uint64_t)shorter_addend->value[i] +
+			(uint64_t)longer_addend->value[i] +
 			(uint64_t)carry;
 
 		total_buffer->value[i] = (uint32_t)sum;
@@ -62,8 +62,8 @@ void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2
 		i++;
 	}
 
-	while (i < greater_addend->len) {
-		uint64_t sum = (uint64_t)greater_addend->value[i] + (uint64_t)carry;
+	while (i < longer_addend->len) {
+		uint64_t sum = (uint64_t)longer_addend->value[i] + (uint64_t)carry;
 		total_buffer->value[i] = (uint32_t)sum;
 		carry = sum >> (BIGUINT_BASE / 2);
 		i++;
@@ -73,7 +73,6 @@ void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2
 		biguint_increase_len(total_buffer, total_buffer->len * 2);
 		total_buffer->value[i] = carry;
 	}
-
 }
 
 void biguint_mult(biguint_t* product_buffer, biguint_t* factor1, biguint_t* factor2) {
