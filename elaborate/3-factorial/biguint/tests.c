@@ -225,6 +225,7 @@ int main(void) {
 	failures += test_sum_without_overflow();
 	failures += test_sum_with_overflow();
 	failures += test_sum_with_second_addend_having_greater_length();
+	failures += test_sum_with_first_addend_having_greater_length();
 
 	biguint_destroy(&fixtureA);
 	biguint_destroy(&fixtureB);
@@ -233,5 +234,11 @@ int main(void) {
 	biguint_destroy(&fixtureE);
 	biguint_destroy(&buffer);
 
-	return failures > 0;
+	if (failures > 0) {
+		fprintf(stdout, "!!!%d tests FAILED!!!\n", failures);
+		return 1;
+	}
+
+	fprintf(stdout, "All tests passed!\n");
+	return 0;
 }
