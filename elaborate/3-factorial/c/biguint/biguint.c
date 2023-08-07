@@ -107,8 +107,12 @@ void biguint_mult(biguint_t* product_buffer, biguint_t* factor1, biguint_t* fact
 }
 
 void biguint_print_base16(FILE* stream, biguint_t* biguint) {
+	if (biguint->len == 0) {
+		fprintf(stream, "0x0");
+	}
+
 	size_t i = biguint->len;
-	fprintf(stream, "0x");
+	fprintf(stream, "0x%x", biguint->value[--i]);
 
 	while (i > 0) {
 		fprintf(stream, "%.8x", biguint->value[i-1]);
