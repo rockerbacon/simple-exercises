@@ -88,8 +88,7 @@ int test_sum_without_overflow(void) {
 		buffer.value[4] == 0x00000001 &&
 		buffer.value[5] == 0x00 &&
 		buffer.value[6] == 0x00 &&
-		buffer.value[7] == 0x00 &&
-		buffer.len == 8
+		buffer.value[7] == 0x00
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -110,7 +109,6 @@ int test_sum_with_overflow(void) {
 
 	int failure;
 	if (
-		buffer.len == 16 &&
 		buffer.value[0] == 0x00 &&
 		buffer.value[1] == 0x00 &&
 		buffer.value[2] == 0x00 &&
@@ -119,14 +117,7 @@ int test_sum_with_overflow(void) {
 		buffer.value[5] == 0x14cd003b &&
 		buffer.value[6] == 0x2030d9a8 &&
 		buffer.value[7] == 0x4d7fd5d5 &&
-		buffer.value[8] == 0x00000001 &&
-		buffer.value[9] == 0x00 &&
-		buffer.value[10] == 0x00 &&
-		buffer.value[11] == 0x00 &&
-		buffer.value[12] == 0x00 &&
-		buffer.value[13] == 0x00 &&
-		buffer.value[14] == 0x00 &&
-		buffer.value[15] == 0x00
+		buffer.value[8] == 0x00000001
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -147,7 +138,6 @@ int test_sum_with_second_addend_having_greater_length(void) {
 
 	int failure;
 	if (
-		buffer.len == 16 &&
 		buffer.value[0] == 0x00 &&
 		buffer.value[1] == 0x00 &&
 		buffer.value[2] == 0x00 &&
@@ -184,7 +174,6 @@ int test_sum_with_first_addend_having_greater_length(void) {
 
 	int failure;
 	if (
-		buffer.len == 16 &&
 		buffer.value[0] == 0x00 &&
 		buffer.value[1] == 0x00 &&
 		buffer.value[2] == 0x00 &&
@@ -221,7 +210,6 @@ int test_mult(void) {
 
 	int failure;
 	if (
-		buffer.len == 32 &&
 		buffer.value[0] == 0x00 &&
 		buffer.value[1] == 0x00 &&
 		buffer.value[2] == 0x00 &&

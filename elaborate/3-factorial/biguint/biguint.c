@@ -45,7 +45,8 @@ void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2
 		shorter_addend = addend2;
 	}
 
-	if (total_buffer->len < longer_addend->len) {
+	biguint_set(total_buffer, 0);
+	if (total_buffer->len < longer_addend->len + 1) {
 		biguint_increase_len(total_buffer, longer_addend->len + 1);
 	}
 
@@ -69,10 +70,7 @@ void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2
 		i++;
 	}
 
-	if (carry > 0) {
-		biguint_increase_len(total_buffer, total_buffer->len * 2);
-		total_buffer->value[i] = carry;
-	}
+	total_buffer->value[i] = carry;
 }
 
 void biguint_mult(biguint_t* product_buffer, biguint_t* factor1, biguint_t* factor2) {
