@@ -11,19 +11,8 @@ void biguint_destroy(biguint_t* biguint) {
 }
 
 void biguint_increase_len(biguint_t* biguint, size_t new_len) {
-	uint32_t* value_copy = (uint32_t*)malloc(new_len*sizeof(uint32_t));
-
-	for (size_t i = 0; i < biguint->len; i++) {
-		value_copy[i] = biguint->value[i];
-	}
-
-	for (size_t i = biguint->len; i < new_len; i++) {
-		value_copy[i] = 0;
-	}
-
-	biguint_destroy(biguint);
 	biguint->len = new_len;
-	biguint->value = value_copy;
+	biguint->value = (uint32_t*)realloc(biguint->value, new_len*sizeof(uint32_t));
 }
 
 void biguint_set(biguint_t* biguint, uint64_t value) {
