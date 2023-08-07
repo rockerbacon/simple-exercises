@@ -2,7 +2,9 @@ CC=gcc
 AR=ar
 CFLAGS=-Wall -Wextra -Werror -pedantic -I.
 
-default: tests libbiguint.a
+default: libbiguint.a
+
+.PHONY: clean
 
 factorial.o: factorial.c biguint.h
 	$(CC) $(CFLAGS) -Ofast -c -o $@ $<
@@ -15,4 +17,7 @@ libbiguint.a: biguint.o factorial.o
 
 tests: tests.c libbiguint.a
 	$(CC) $(CFLAGS) -Ofast -o $@ $^ -L. -lbiguint
+
+clean:
+	rm -f libbiguint.a biguint.o factorial.o tests
 
