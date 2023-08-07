@@ -62,6 +62,16 @@ void init_fixtureE(void) {
 	fixtureE.value[11] = 0xc4c5d2a7;
 }
 
+int is_all_zero(biguint_t* biguint, size_t range_start, size_t range_end) {
+	for (size_t i = range_start; i < range_end; i++) {
+		if (biguint->value[i] != 0) {
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
 void print_operation(biguint_t* operandA, char operator, biguint_t* operandB, biguint_t* result) {
 	fprintf(stdout, "\t");
 	biguint_print_base16(stdout, operandA);
@@ -86,9 +96,7 @@ int test_sum_without_overflow(void) {
 		buffer.value[2] == 0x2030d9a8 &&
 		buffer.value[3] == 0x4d7fd5d5 &&
 		buffer.value[4] == 0x00000001 &&
-		buffer.value[5] == 0x00 &&
-		buffer.value[6] == 0x00 &&
-		buffer.value[7] == 0x00
+		is_all_zero(&buffer, 5, buffer.len)
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -109,15 +117,13 @@ int test_sum_with_overflow(void) {
 
 	int failure;
 	if (
-		buffer.value[0] == 0x00 &&
-		buffer.value[1] == 0x00 &&
-		buffer.value[2] == 0x00 &&
-		buffer.value[3] == 0x00 &&
+		is_all_zero(&buffer, 0, 4) &&
 		buffer.value[4] == 0x6cfffe71 &&
 		buffer.value[5] == 0x14cd003b &&
 		buffer.value[6] == 0x2030d9a8 &&
 		buffer.value[7] == 0x4d7fd5d5 &&
-		buffer.value[8] == 0x00000001
+		buffer.value[8] == 0x00000001 &&
+		is_all_zero(&buffer, 9, buffer.len)
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -138,10 +144,7 @@ int test_sum_with_second_addend_having_greater_length(void) {
 
 	int failure;
 	if (
-		buffer.value[0] == 0x00 &&
-		buffer.value[1] == 0x00 &&
-		buffer.value[2] == 0x00 &&
-		buffer.value[3] == 0x00 &&
+		is_all_zero(&buffer, 0, 4) &&
 		buffer.value[4] == 0x6cfffe71 &&
 		buffer.value[5] == 0x14cd003b &&
 		buffer.value[6] == 0x2030d9a8 &&
@@ -150,10 +153,7 @@ int test_sum_with_second_addend_having_greater_length(void) {
 		buffer.value[9] == 0xa2b34cc1 &&
 		buffer.value[10] == 0x52a433ab &&
 		buffer.value[11] == 0xc4c5d2a7 &&
-		buffer.value[12] == 0x00 &&
-		buffer.value[13] == 0x00 &&
-		buffer.value[14] == 0x00 &&
-		buffer.value[15] == 0x00
+		is_all_zero(&buffer, 12, buffer.len)
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -174,10 +174,7 @@ int test_sum_with_first_addend_having_greater_length(void) {
 
 	int failure;
 	if (
-		buffer.value[0] == 0x00 &&
-		buffer.value[1] == 0x00 &&
-		buffer.value[2] == 0x00 &&
-		buffer.value[3] == 0x00 &&
+		is_all_zero(&buffer, 0, 4) &&
 		buffer.value[4] == 0x6cfffe71 &&
 		buffer.value[5] == 0x14cd003b &&
 		buffer.value[6] == 0x2030d9a8 &&
@@ -186,10 +183,7 @@ int test_sum_with_first_addend_having_greater_length(void) {
 		buffer.value[9] == 0xa2b34cc1 &&
 		buffer.value[10] == 0x52a433ab &&
 		buffer.value[11] == 0xc4c5d2a7 &&
-		buffer.value[12] == 0x00 &&
-		buffer.value[13] == 0x00 &&
-		buffer.value[14] == 0x00 &&
-		buffer.value[15] == 0x00
+		is_all_zero(&buffer, 12, buffer.len)
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -210,14 +204,7 @@ int test_mult(void) {
 
 	int failure;
 	if (
-		buffer.value[0] == 0x00 &&
-		buffer.value[1] == 0x00 &&
-		buffer.value[2] == 0x00 &&
-		buffer.value[3] == 0x00 &&
-		buffer.value[4] == 0x00 &&
-		buffer.value[5] == 0x00 &&
-		buffer.value[6] == 0x00 &&
-		buffer.value[7] == 0x00 &&
+		is_all_zero(&buffer, 0, 8) &&
 		buffer.value[8] == 0x81563f4a &&
 		buffer.value[9] == 0x61df72af &&
 		buffer.value[10] == 0x0cc3c95f &&
@@ -225,7 +212,8 @@ int test_mult(void) {
 		buffer.value[12] == 0xe49ad395 &&
 		buffer.value[13] == 0xa9a88927 &&
 		buffer.value[14] == 0xbd0099f0 &&
-		buffer.value[15] == 0x6c83f054
+		buffer.value[15] == 0x6c83f054 &&
+		is_all_zero(&buffer, 16, buffer.len)
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
