@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BIGUINT_BASE 64
 #define BIGUINT_INIT_LEN 256 / 8 / sizeof(uint32_t)
 
 #include <stdint.h>

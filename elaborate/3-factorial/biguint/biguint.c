@@ -48,14 +48,14 @@ void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2
 			(uint64_t)carry;
 
 		total_buffer->value[i] = (uint32_t)sum;
-		carry = sum >> (BIGUINT_BASE / 2);
+		carry = sum >> 32;
 		i++;
 	}
 
 	while (i < longer_addend->len) {
 		uint64_t sum = (uint64_t)longer_addend->value[i] + (uint64_t)carry;
 		total_buffer->value[i] = (uint32_t)sum;
-		carry = sum >> (BIGUINT_BASE / 2);
+		carry = sum >> 32;
 		i++;
 	}
 
@@ -78,7 +78,7 @@ void biguint_mult(biguint_t* product_buffer, biguint_t* factor1, biguint_t* fact
 				(uint64_t)carry;
 
 			product_buffer->value[i+j] = (uint32_t)summed_product;
-			carry = summed_product >> (BIGUINT_BASE / 2);
+			carry = summed_product >> 32;
 		}
 
 		product_buffer->value[factor2->len + i] = carry;
