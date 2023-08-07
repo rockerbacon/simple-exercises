@@ -7,50 +7,61 @@ biguint_t fixtureD;
 biguint_t fixtureE;
 biguint_t buffer;
 
+void set_range(biguint_t* biguint, size_t range_start, size_t range_end, uint32_t digit) {
+	for (size_t i = range_start; i < range_end; i++) {
+		biguint->value[i] = digit;
+	}
+}
+
 void init_fixtureA(void) {
 	biguint_init(&fixtureA);
-	biguint_set(&fixtureA, 0);
 
 	fixtureA.value[0] = 0xaabbcc03;
 	fixtureA.value[1] = 0x11224469;
 	fixtureA.value[2] = 0x4a6a2200;
 	fixtureA.value[3] = 0xabcd1200;
+
+	fixtureA.len = 4;
 }
 
 void init_fixtureB(void) {
 	biguint_init(&fixtureB);
-	biguint_set(&fixtureB, 0);
 
 	fixtureB.value[0] = 0xc244326e;
 	fixtureB.value[1] = 0x03aabbd1;
 	fixtureB.value[2] = 0xd5c6b7a8;
 	fixtureB.value[3] = 0xa1b2c3d4;
+
+	fixtureB.len = 4;
 }
 
 void init_fixtureC(void) {
 	biguint_init(&fixtureC);
-	biguint_set(&fixtureC, 0);
+	set_range(&fixtureC, 0, 4, 0);
 
 	fixtureC.value[4] = 0xaabbcc03;
 	fixtureC.value[5] = 0x11224469;
 	fixtureC.value[6] = 0x4a6a2200;
 	fixtureC.value[7] = 0xabcd1200;
+
+	fixtureC.len = 8;
 }
 
 void init_fixtureD(void) {
 	biguint_init(&fixtureD);
-	biguint_set(&fixtureD, 0);
+	set_range(&fixtureD, 0, 4, 0);
 
 	fixtureD.value[4] = 0xc244326e;
 	fixtureD.value[5] = 0x03aabbd1;
 	fixtureD.value[6] = 0xd5c6b7a8;
 	fixtureD.value[7] = 0xa1b2c3d4;
+
+	fixtureD.len = 8;
 }
 
 void init_fixtureE(void) {
 	biguint_init(&fixtureE);
-	biguint_set(&fixtureE, 0);
-	biguint_increase_len(&fixtureE, fixtureE.len * 2);
+	set_range(&fixtureE, 0, 4, 0);
 
 	fixtureE.value[4] = fixtureD.value[4];
 	fixtureE.value[5] = fixtureD.value[5];
@@ -60,6 +71,8 @@ void init_fixtureE(void) {
 	fixtureE.value[9] = 0xa2b34cc1;
 	fixtureE.value[10] = 0x52a433ab;
 	fixtureE.value[11] = 0xc4c5d2a7;
+
+	fixtureE.len = 12;
 }
 
 int is_all_zero(biguint_t* biguint, size_t range_start, size_t range_end) {
@@ -96,7 +109,7 @@ int test_sum_without_overflow(void) {
 		buffer.value[2] == 0x2030d9a8 &&
 		buffer.value[3] == 0x4d7fd5d5 &&
 		buffer.value[4] == 0x00000001 &&
-		is_all_zero(&buffer, 5, buffer.len)
+		buffer.len == 5
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -123,7 +136,7 @@ int test_sum_with_overflow(void) {
 		buffer.value[6] == 0x2030d9a8 &&
 		buffer.value[7] == 0x4d7fd5d5 &&
 		buffer.value[8] == 0x00000001 &&
-		is_all_zero(&buffer, 9, buffer.len)
+		buffer.len == 9
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -153,7 +166,7 @@ int test_sum_with_second_addend_having_greater_length(void) {
 		buffer.value[9] == 0xa2b34cc1 &&
 		buffer.value[10] == 0x52a433ab &&
 		buffer.value[11] == 0xc4c5d2a7 &&
-		is_all_zero(&buffer, 12, buffer.len)
+		buffer.len == 12
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -183,7 +196,7 @@ int test_sum_with_first_addend_having_greater_length(void) {
 		buffer.value[9] == 0xa2b34cc1 &&
 		buffer.value[10] == 0x52a433ab &&
 		buffer.value[11] == 0xc4c5d2a7 &&
-		is_all_zero(&buffer, 12, buffer.len)
+		buffer.len == 12
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");
@@ -213,7 +226,7 @@ int test_mult(void) {
 		buffer.value[13] == 0xa9a88927 &&
 		buffer.value[14] == 0xbd0099f0 &&
 		buffer.value[15] == 0x6c83f054 &&
-		is_all_zero(&buffer, 16, buffer.len)
+		buffer.len == 16
 	) {
 		failure = 0;
 		fprintf(stdout, "Passed.\n\n");

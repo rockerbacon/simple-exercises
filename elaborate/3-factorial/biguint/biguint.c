@@ -1,25 +1,31 @@
 #include <biguint.h>
 #include <stdlib.h>
 
+#define DEFAULT_CAPACITY 4096 / 8 / sizeof(uint32_t)
+
+void biguint_alloc_capacity(biguint_t* biguint, size_t capacity) {
+	if (biguint->len > capacity) {
+		biguint->len = capacity;
+	}
+
+	biguint->capacity = capacity;
+	biguint->value = (uint32_t*)realloc(biguint->value, capacity*sizeof(uint32_t));
+}
+
 void biguint_init(biguint_t* biguint) {
-	biguint->len = BIGUINT_INIT_LEN;
-	biguint->value = (uint32_t*)malloc(BIGUINT_INIT_LEN*sizeof(uint32_t));
+	biguint->len = 0;
+	biguint->capacity = 0;
+	biguint->value = NULL;
+	biguint_alloc_capacity(biguint, DEFAULT_CAPACITY);
 }
 
 void biguint_destroy(biguint_t* biguint) {
 	free(biguint->value);
 }
 
-void biguint_increase_len(biguint_t* biguint, size_t new_len) {
-	biguint->len = new_len;
-	biguint->value = (uint32_t*)realloc(biguint->value, new_len*sizeof(uint32_t));
-}
-
-void biguint_set(biguint_t* biguint, uint64_t value) {
+void biguint_set(biguint_t* biguint, uint32_t value) {
 	biguint->value[0] = value;
-	for (size_t i = 1; i < biguint->len; i++) {
-		biguint->value[i] = 0;
-	}
+	biguint->len = 1;
 }
 
 void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2) {
@@ -34,9 +40,8 @@ void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2
 		shorter_addend = addend2;
 	}
 
-	biguint_set(total_buffer, 0);
-	if (total_buffer->len < longer_addend->len + 1) {
-		biguint_increase_len(total_buffer, longer_addend->len + 1);
+	if (total_buffer->capacity < longer_addend->len + 1) {
+		biguint_alloc_capacity(total_buffer, total_buffer->capacity * 2);
 	}
 
 	size_t i = 0;
@@ -59,17 +64,27 @@ void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2
 		i++;
 	}
 
-	total_buffer->value[i] = carry;
+	if (carry > 0) {
+		total_buffer->value[i] = carry;
+		total_buffer->len = i+1;
+	} else {
+		total_buffer->len = i;
+	}
 }
 
 void biguint_mult(biguint_t* product_buffer, biguint_t* factor1, biguint_t* factor2) {
-	biguint_set(product_buffer, 0);
-	if (product_buffer->len < factor1->len + factor2->len + 1) {
-		biguint_increase_len(product_buffer, (factor1->len + factor2->len) * 2);
+	if (product_buffer->len < factor1->len + factor2->len) {
+		biguint_alloc_capacity(product_buffer, (factor1->len + factor2->len) * 2);
 	}
 
+	for (size_t i = 0; i < factor1->len + factor2->len; i++) {
+		product_buffer->value[i] = 0;
+	}
+
+	uint32_t carry = 0;
 	for (size_t i = 0; i < factor1->len; i++) {
-		uint32_t carry = 0;
+		carry = 0;
+
 		for (size_t j = 0; j < factor2->len; j++) {
 			uint64_t summed_product =
 				(uint64_t)factor1->value[i] *
@@ -83,15 +98,17 @@ void biguint_mult(biguint_t* product_buffer, biguint_t* factor1, biguint_t* fact
 
 		product_buffer->value[factor2->len + i] = carry;
 	}
+
+	if (carry > 0) {
+		product_buffer->len = factor1->len + factor2->len;
+	} else {
+		product_buffer->len = factor1->len + factor2->len - 1;
+	}
 }
 
 void biguint_print_base16(FILE* stream, biguint_t* biguint) {
 	size_t i = biguint->len;
 	fprintf(stream, "0x");
-
-	while (i > 0 && biguint->value[i-1] == 0) {
-		i--;
-	}
 
 	while (i > 0) {
 		fprintf(stream, "%.8x", biguint->value[i-1]);

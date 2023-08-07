@@ -1,13 +1,11 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 
-#define BIGUINT_INIT_LEN 256 / 8 / sizeof(uint32_t)
-
-#include <stdint.h>
-
 typedef struct {
+	size_t capacity;
 	size_t len;
 	uint32_t *value;
 } biguint_t;
@@ -32,14 +30,14 @@ void biguint_init(biguint_t* biguint);
 void biguint_destroy(biguint_t* biguint);
 
 /**
- * Increases the length of a biguint_t instance.
- * This is done automatically during arithmetic operations,
+ * Sets the capacity of a biguint_t instance.
+ * This is done automatically during initialization and arithmetic operations,
  * and explicitly using this function is discouraged.
  *
- * @param biguint the instance to increase
- * @param new_len the new length for the instance. A unit of new_len equals 4 bytes
+ * @param biguint the instance to set
+ * @param capacity the new capacity for the instance. Value must be in digits, and the base is 2^32
  */
-void biguint_increase_len(biguint_t* biguint, size_t new_len);
+void biguint_alloc_capacity(biguint_t* biguint, size_t capacity);
 
 /**
  * Sets the value of the biguint_t instance
@@ -47,7 +45,7 @@ void biguint_increase_len(biguint_t* biguint, size_t new_len);
  * @param biguint instance to modify
  * @param value value to set to the biguint_t instance
  */
-void biguint_set(biguint_t* biguint, uint64_t value);
+void biguint_set(biguint_t* biguint, uint32_t value);
 
 /**
  * Multiplies two biguint_t instances
@@ -68,13 +66,12 @@ void biguint_mult(biguint_t* product_buffer, biguint_t* factor1, biguint_t* fact
 void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2);
 
 /**
- * Converts biguint_t to a decimal string representation,
- * outputing to the provided stream.
+ * Calculates the factorial of a number, utilizing biguint arithmetic
  *
- * @param stream location where the string will be written to
- * @param biguint biguint_t to read from
+ * @param result_buffer buffer where the result of the operation will be stored
+ * @param number the number for which to calculate the factorial
  */
-void biguint_print_base10(FILE* stream, biguint_t* biguint);
+void biguint_factorial(biguint_t* result_buffer, uint32_t number);
 
 /**
  * Converts biguint_t to a hexadecimal string representation,
