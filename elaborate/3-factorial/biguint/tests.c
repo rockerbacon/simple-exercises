@@ -7,6 +7,19 @@ biguint_t fixtureD;
 biguint_t fixtureE;
 biguint_t buffer;
 
+int test(int condition) {
+	int failure;
+	if (condition) {
+		failure = 0;
+		fprintf(stdout, "Passed.\n\n");
+	} else {
+		failure = 1;
+		fprintf(stdout, "!!!FAILED!!!\n\n");
+	}
+
+	return failure;
+}
+
 void set_range(biguint_t* biguint, size_t range_start, size_t range_end, uint32_t digit) {
 	for (size_t i = range_start; i < range_end; i++) {
 		biguint->value[i] = digit;
@@ -85,7 +98,7 @@ int is_all_zero(biguint_t* biguint, size_t range_start, size_t range_end) {
 	return 1;
 }
 
-void print_operation(biguint_t* operandA, char operator, biguint_t* operandB, biguint_t* result) {
+void print_infix_operation(biguint_t* operandA, char operator, biguint_t* operandB, biguint_t* result) {
 	fprintf(stdout, "\t");
 	biguint_print_base16(stdout, operandA);
 	fprintf(stdout, "\n\t %c \n\t", operator);
@@ -95,12 +108,18 @@ void print_operation(biguint_t* operandA, char operator, biguint_t* operandB, bi
 	fprintf(stdout, "\n");
 }
 
+void print_factorial_operation(uint32_t operand, biguint_t* result) {
+	fprintf(stdout, "\t%d! = \n\t", operand);
+	biguint_print_base16(stdout, result);
+	fprintf(stdout, "\n");
+}
+
 int test_sum_without_overflow(void) {
 	fprintf(stdout, "Testing biguint_sum(), without overflows...\n");
 
 	biguint_sum(&buffer, &fixtureA, &fixtureB);
 
-	print_operation(&fixtureA, '+', &fixtureB, &buffer);
+	print_infix_operation(&fixtureA, '+', &fixtureB, &buffer);
 
 	int failure;
 	if (
@@ -126,7 +145,7 @@ int test_sum_with_overflow(void) {
 
 	biguint_sum(&buffer, &fixtureC, &fixtureD);
 
-	print_operation(&fixtureC, '+', &fixtureD, &buffer);
+	print_infix_operation(&fixtureC, '+', &fixtureD, &buffer);
 
 	int failure;
 	if (
@@ -153,7 +172,7 @@ int test_sum_with_second_addend_having_greater_length(void) {
 
 	biguint_sum(&buffer, &fixtureC, &fixtureE);
 
-	print_operation(&fixtureC, '+', &fixtureE, &buffer);
+	print_infix_operation(&fixtureC, '+', &fixtureE, &buffer);
 
 	int failure;
 	if (
@@ -183,7 +202,7 @@ int test_sum_with_first_addend_having_greater_length(void) {
 
 	biguint_sum(&buffer, &fixtureE, &fixtureC);
 
-	print_operation(&fixtureE, '+', &fixtureC, &buffer);
+	print_infix_operation(&fixtureE, '+', &fixtureC, &buffer);
 
 	int failure;
 	if (
@@ -213,7 +232,7 @@ int test_mult(void) {
 
 	biguint_mult(&buffer, &fixtureC, &fixtureD);
 
-	print_operation(&fixtureC, '*', &fixtureD, &buffer);
+	print_infix_operation(&fixtureC, '*', &fixtureD, &buffer);
 
 	int failure;
 	if (
@@ -238,6 +257,58 @@ int test_mult(void) {
 	return failure;
 }
 
+int test_0factorial(void) {
+	fprintf(stdout, "Testing biguint_factorial(0)...\n");
+
+	biguint_factorial(&buffer, 0);
+	print_factorial_operation(0, &buffer);
+
+	return test(
+		buffer.value[0] == 1 &&
+		buffer.len == 1
+	);
+}
+
+int test_2factorial(void) {
+	fprintf(stdout, "Testing biguint_factorial(2)...\n");
+
+	biguint_factorial(&buffer, 2);
+	print_factorial_operation(2, &buffer);
+
+	return test(
+		buffer.value[0] == 2 &&
+		buffer.len == 1
+	);
+}
+
+int test_10factorial(void) {
+	fprintf(stdout, "Testing biguint_factorial(10)...\n");
+
+	biguint_factorial(&buffer, 10);
+	print_factorial_operation(10, &buffer);
+
+	return test(
+		buffer.value[0] == 0x375f00 &&
+		buffer.len == 1
+	);
+}
+
+int test_50factorial(void) {
+	fprintf(stdout, "Testing biguint_factorial(50)...\n");
+	biguint_factorial(&buffer, 50);
+	print_factorial_operation(50, &buffer);
+
+	return test(
+		buffer.value[0] == 0x00 &&
+		buffer.value[1] == 0xd2c78000 &&
+		buffer.value[2] == 0x4f5973a1 &&
+		buffer.value[3] == 0xf28d19a8 &&
+		buffer.value[4] == 0xb02b1ef4 &&
+		buffer.value[5] == 0x961ed279 &&
+		buffer.value[6] == 0x0049eebc &&
+		buffer.len == 7
+	);
+}
 
 int main(void) {
 	int failures = 0;
@@ -254,6 +325,10 @@ int main(void) {
 	failures += test_sum_with_second_addend_having_greater_length();
 	failures += test_sum_with_first_addend_having_greater_length();
 	failures += test_mult();
+	failures += test_0factorial();
+	failures += test_2factorial();
+	failures += test_10factorial();
+	failures += test_50factorial();
 
 	biguint_destroy(&fixtureA);
 	biguint_destroy(&fixtureB);
