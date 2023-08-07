@@ -10,7 +10,7 @@ biguint/libbiguint.a:
 	make --directory biguint
 
 main: main.c biguint/libbiguint.a
-	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
+	$(CC) $(CFLAGS) -Ofast -o $@ $^ $(LFLAGS)
 
 clean:
 	rm -f main

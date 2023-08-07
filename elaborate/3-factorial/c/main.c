@@ -12,9 +12,10 @@ typedef struct {
 
 void print_help(const char* binary_path) {
 	printf("Usage: %s [OPTIONS...] NUMBER\n\n", binary_path);
+	printf("NUMBER:\tany positive integer\n");
 	printf("OPTIONS:\n");
 	printf("\t--help,-h\tprint this help message and exit\n");
-	printf("\t--quiet,-q\tdon't print the factorial result\n");
+	printf("\t--quiet,-q\tdon't print the factorial result\n\n");
 }
 
 int check_is_integer(const char* str) {
@@ -69,7 +70,7 @@ int parse_args(arguments_t* args, int argc, char** argv) {
 	}
 
 	if (!check_is_integer(argv[i])) {
-		fprintf(stderr, "ERROR: Invalid argument '%s'\n", argv[i]);
+		fprintf(stderr, "ERROR: Invalid NUMBER argument '%s'\n", argv[i]);
 		return 1;
 	}
 
