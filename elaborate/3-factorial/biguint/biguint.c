@@ -76,11 +76,25 @@ void biguint_sum(biguint_t* total_buffer, biguint_t* addend1, biguint_t* addend2
 }
 
 void biguint_mult(biguint_t* product_buffer, biguint_t* factor1, biguint_t* factor2) {
-	for (size_t j = 0; j < factor1->len; j++) {
-		for (size_t i = 0; i < factor2->len; i++) {
-			// TODO proper multiplication algorithm
-			product_buffer->value[i] = factor1->value[i] * factor2->value[i];
+	biguint_set(product_buffer, 0);
+	if (product_buffer->len < factor1->len + factor2->len + 1) {
+		biguint_increase_len(product_buffer, (factor1->len + factor2->len) * 2);
+	}
+
+	for (size_t i = 0; i < factor1->len; i++) {
+		uint32_t carry = 0;
+		for (size_t j = 0; j < factor2->len; j++) {
+			uint64_t summed_product =
+				(uint64_t)factor1->value[i] *
+				(uint64_t)factor2->value[j] +
+				(uint64_t)product_buffer->value[i+j] +
+				(uint64_t)carry;
+
+			product_buffer->value[i+j] = (uint32_t)summed_product;
+			carry = summed_product >> (BIGUINT_BASE / 2);
 		}
+
+		product_buffer->value[factor2->len + i] = carry;
 	}
 }
 
@@ -93,7 +107,7 @@ void biguint_print_base16(FILE* stream, biguint_t* biguint) {
 	}
 
 	while (i > 0) {
-		fprintf(stream, "%.4x", biguint->value[i-1]);
+		fprintf(stream, "%.8x", biguint->value[i-1]);
 		i--;
 	}
 }

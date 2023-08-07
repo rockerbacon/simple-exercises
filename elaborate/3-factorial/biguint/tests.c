@@ -212,6 +212,44 @@ int test_sum_with_first_addend_having_greater_length(void) {
 	return failure;
 }
 
+int test_mult(void) {
+	fprintf(stdout, "Testing biguint_mult()...\n");
+
+	biguint_mult(&buffer, &fixtureC, &fixtureD);
+
+	print_operation(&fixtureC, '*', &fixtureD, &buffer);
+
+	int failure;
+	if (
+		buffer.len == 32 &&
+		buffer.value[0] == 0x00 &&
+		buffer.value[1] == 0x00 &&
+		buffer.value[2] == 0x00 &&
+		buffer.value[3] == 0x00 &&
+		buffer.value[4] == 0x00 &&
+		buffer.value[5] == 0x00 &&
+		buffer.value[6] == 0x00 &&
+		buffer.value[7] == 0x00 &&
+		buffer.value[8] == 0x81563f4a &&
+		buffer.value[9] == 0x61df72af &&
+		buffer.value[10] == 0x0cc3c95f &&
+		buffer.value[11] == 0x7b028a9d &&
+		buffer.value[12] == 0xe49ad395 &&
+		buffer.value[13] == 0xa9a88927 &&
+		buffer.value[14] == 0xbd0099f0 &&
+		buffer.value[15] == 0x6c83f054
+	) {
+		failure = 0;
+		fprintf(stdout, "Passed.\n\n");
+	} else {
+		failure = 1;
+		fprintf(stdout, "!!!FAILED!!!\n\n");
+	}
+
+	return failure;
+}
+
+
 int main(void) {
 	int failures = 0;
 
@@ -226,6 +264,7 @@ int main(void) {
 	failures += test_sum_with_overflow();
 	failures += test_sum_with_second_addend_having_greater_length();
 	failures += test_sum_with_first_addend_having_greater_length();
+	failures += test_mult();
 
 	biguint_destroy(&fixtureA);
 	biguint_destroy(&fixtureB);
