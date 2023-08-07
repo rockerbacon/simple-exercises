@@ -1,6 +1,8 @@
-*.so
+*.a
+*.o
 compile_commands.json
 .cache
 
 /elaborate/3-factorial/biguint/tests
+/elaborate/3-factorial/main
 
