@@ -58,7 +58,10 @@ def print_table_header():
     print(format_table_row('Implementation', 'Calculation', 'Time'))
 
 def print_table_row(implementation, calculation, time):
-    print(format_table_row(implementation, f'{calculation}!', f'{time // 1000000}ms'))
+    us_time = time // 1000
+    ms_time = time // 1000000
+    time_display = f'{ms_time}ms' if ms_time > 0 else f'{us_time}us'
+    print(format_table_row(implementation, f'{calculation}!', time_display))
 
 def main():
     args = parse_args()
