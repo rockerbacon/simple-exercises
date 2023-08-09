@@ -14,6 +14,32 @@ func init() {
 	constant.two.SetUint64(2)
 }
 
+func multiplyRange(start uint32, end uint32) *big.Int {
+	if (start == end) {
+		return big.NewInt(int64(start))
+	} else if (start > end) {
+		return big.NewInt(1)
+	}
+
+	middle := (start + end) / 2
+	left_result := multiplyRange(start, middle)
+	right_result := multiplyRange(middle + 1, end)
+
+	buffer := big.Int{}
+
+	return buffer.Mul(left_result, right_result)
+}
+
+func FastFactorial(number uint32) *big.Int {
+	if (number == 0) {
+		return big.NewInt(1);
+	} else if (number < 3) {
+		return big.NewInt(int64(number));
+	}
+
+	return multiplyRange(2, number);
+}
+
 func factorial(
 	number *big.Int,
 	decrementBuffer *big.Int,

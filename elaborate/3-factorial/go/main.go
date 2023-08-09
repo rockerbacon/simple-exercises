@@ -56,7 +56,7 @@ func main() {
 		os.Exit(1);
 	}
 
-	result := bigmath.Factorial(args.number)
+	result := bigmath.FastFactorial(args.number)
 
 	if (!args.quiet) {
 		fmt.Printf("0x%s\n", result.Text(16))
