@@ -132,22 +132,6 @@ We can define the number of digits in _n_ simply as `d(n)=floor(log(n)) + 1`.
 For _(n-1)!_, it is possible to use Stirling's formula to approximately estimate the number of digits the result of a given factorial will have,
 which will lead us to `d((n-1)!) = (n-1)log(n-1) = n*log(n-1) - log(n-1)`.
 
-```
-n*k*log(k)
-n*(d(n-1!))*log(d(n-1!))
-n*(n*log(n)-log(n))*log(n*log(n) - log(n))
-(n^2*log(n)-n*log(n))*(log(n) + log^2(n))
-(n^2*log(n))*log^2(n)
-n^2*log^3(n)
-```
-
-```
-n*x*y
-n*d((n-1)!)*d(n)
-n*(n*log(n))*log(n)
-n^2*log^2(n)
-```
-
 By multiplying our _O(n)_ factorial complexity with our _O(x*y)_ multiplication complexity, we can calculate our real-world factorial complexity:
 ```
 O(n*x*y) =
