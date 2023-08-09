@@ -1,0 +1,9 @@
+*.a
+*.o
+compile_commands.json
+.cache
+
+/elaborate/3-factorial/c/biguint/tests
+/elaborate/3-factorial/c/main
+/elaborate/3-factorial/go/simple_exercises
+
