@@ -1,26 +1,21 @@
 ## Introduction
 This repository explores 8 extremely simple and well-defined coding exercises.
 
-Each exercise is completed twice: first a minimalistic approach is taken, followed by a more elaborate one.
-Details on the exercises and approaches are documented below.
+All exercises will be solved using a minimal, naive approach,
+with the goal of minimizing the time to complete them
+and writing the (arguably) most intuitive and simple solutions to the proposed problems.
 
-## Minimalistic Approach
-First, a minimal, naive approach is taken.
-The goal is to minimize the time to complete the exercises, while also writing the (arguably) most intuitive and simple solution to the proposed problems.
+Solutions to all exercises are available in the `minimalistic` directory.
+The code is written in Python (version 3.11.4).
 
-All solutions developed under this approach are available in the `minimalistic` directory.
-
-The code is written in Python (version 3.11.4). There is no specific reason for using Python, most general-purpose programming languages are well-suited for solving the exercises with this approach.
-
-## Elaborate Approach
-For this approach, some properties of the proposed problems are expanded upon, leading to more complex tasks. The objective is to showcase how these simple programming exercises relate to real-world problems, as well as some more advanced techniques to solve them.
-
-Solutions developed under this approach are available in the `elaborate` directory. The solution for each exercise is contained within its own subdirectory. The elaborations on the problems and proposed solutions are documented in the `README.md` file in each exercise subdirectory.
-
-For this approach, no single programming language is used. Each solution is written in a language that the author believes better fits the requirements of the problem, with brief justifications for each choice documented in the `README.md` files.
+Additionaly, we will also do an in-depth exploration of the factorial problem (exercise 3).
+The objective is to showcase how a seemingly simple programming exercise can relate to
+complex real-world problems, as well as more advanced techniques to solve them.
+This exploration can be found under the directory `elaborate/3-factorial`
+and a `README.md` will be provided there, documenting all the analyzed problems and solutions.
 
 ## The Exercises
-The exercises are from an undisclosed external source and are described bellow, in verbatim.
+The exercises are from an undisclosed external source and are described below, in verbatim.
 
 #### Exercise 1: Simple Calculator
 Create a calculator that takes two numbers and an operator (+, -, \*, /) and returns the result of the operation.
