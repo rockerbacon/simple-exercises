@@ -191,7 +191,7 @@ meaning that the least significant digit is at the index 0 of the vector.
 The code provides functions for summing, multiplying and printing values in a hexadecimal base.
 _long multiplication_ was the multiplication algorithm of choice.
 Numbers are printed in hexadecimal instead of decimal simply because the standard C formatting
-functionality is already capable of converting any 2^x base to hexadecimal, meaning we don't need.
+functionality is already capable of converting any 2^x base to hexadecimal.
 
 The arbitrary-precision source code can be found at `elaborate/3-factorial/c/biguint/biguint.c`.
 
